@@ -1,7 +1,8 @@
 import React from "react";
+import MainNotFound from "../components/notFound";
 
 const NotFound = () => {
-  return <div>NotFound</div>;
+  return <MainNotFound />;
 };
 
 export default NotFound;
