@@ -1,0 +1,6 @@
+.header {
+}
+
+:global(.navbar-brand) img {
+  height: 40px;
+}
