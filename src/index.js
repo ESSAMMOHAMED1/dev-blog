@@ -5,16 +5,16 @@ import App from './App';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import { FirebaseProvider } from './context/FirebaseContext';
+import ContextProvider from './context/ContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <FirebaseProvider>
+    <ContextProvider>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-    </FirebaseProvider>
+    </ContextProvider>
   </React.StrictMode>
 );
 
