@@ -1,19 +1,49 @@
-import React, { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import React, { useContext, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
+import { FirebaseContext } from "../../context/FirebaseContext";
 
 const MainNewPost = () => {
+  const navigate = useNavigate();
   const [body, setBody] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { db } = useContext(FirebaseContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const title = e.target.title.value;
     const excert = e.target.excert.value;
     const image = e.target.image.value;
-    console.log({ title, excert, image, body });
+    // first blog => first-blog-1231545
+    const slug = title.split(" ").join("-") + "-" + new Date().getTime();
+
+    setLoading(true);
+
+    try {
+      const colRef = collection(db, "posts");
+      await addDoc(colRef, {
+        title,
+        excert,
+        slug,
+        image,
+        body,
+        user: "Hossam",
+        createdAt: serverTimestamp(),
+      });
+      e.target.reset();
+      setBody("");
+      setLoading(false);
+      navigate("/blog/" + slug);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
   };
   return (
     <section className="py-5">
@@ -48,8 +78,8 @@ const MainNewPost = () => {
                 />
               </Form.Group>
               <ReactQuill theme="snow" value={body} onChange={setBody} />
-              <Button type="submit" className="mt-4 w-100">
-                submit
+              <Button type="submit" className="mt-4 w-100" disabled={loading}>
+                submit {loading ? "..." : ""}
               </Button>
             </Form>
           </Col>
