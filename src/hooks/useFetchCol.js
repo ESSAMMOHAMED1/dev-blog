@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from "firebase/firestore"
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore"
 import React, { useCallback, useContext, useState } from 'react'
 import { FirebaseContext } from "../context/FirebaseContext"
 
@@ -14,7 +14,7 @@ const useFetchCol = (colName) => {
     setLoading(true)
     try {
       const colRef = collection(db, colName)
-      const q = query(colRef)
+      const q = query(colRef,orderBy("createdAt","desc"),limit(8))
       const res = await getDocs(q)
 
       const resData = res.docs.map(doc => {
