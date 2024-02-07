@@ -1,7 +1,10 @@
 .postcard_img {
   position: relative;
 }
-
+.postcard_img img{
+  aspect-ratio: 1.5 / 1;
+  object-fit: cover;
+}
 .postcard_img_info {
   display: flex;
   align-items: center;
