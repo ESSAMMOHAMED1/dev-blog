@@ -6,17 +6,25 @@ export const PostsContext = createContext()
 
 export const PostsProvider = ({ children }) => {
 
-  const { getData, data, loading, error } = useFetchCol('posts')
+  const { getData, getNextData, data, loading, error, fetching, lastDoc } = useFetchCol('posts')
 
   const fetch = useCallback(() => {
-
     if (!data) {
       getData()
     }
   }, [data, getData])
 
+  const fetchNext = useCallback(() => {
+    if (data && !loading && !fetching && lastDoc) {
+      console.log("dddddd");
+      getNextData(lastDoc)
+    }
+  }, [data, getNextData, loading, fetching, lastDoc])
 
-  return <PostsContext.Provider value={{ fetch, data, loading, error }}>
+  const refetch = getData
+
+
+  return <PostsContext.Provider value={{ fetch, data, loading, error, fetchNext, fetching, refetch }}>
     {children}
   </PostsContext.Provider>
 }

@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
+import { PostsContext } from "../../context/PostsContext";
 import PostCard from "./PostCard";
 
 const MainBlog = () => {
+  const { fetch, loading, error, data, fetching, fetchNext } =
+    useContext(PostsContext);
   const isMount = useRef(false);
   const blogObserveRef = useRef(null);
+
   useEffect(() => {
     if (!isMount.current) {
       fetch();
@@ -17,6 +21,7 @@ const MainBlog = () => {
       const blogObserver = entries[0];
       if (blogObserver.isIntersecting) {
         // fetch next data
+        fetchNext();
       }
     }, {});
 
@@ -54,6 +59,9 @@ const MainBlog = () => {
             ))}
           </Row>
         ) : null}
+
+        {fetching ? <p className="text-center"> loading ....</p> : null}
+
         <div className="blog-observer" ref={blogObserveRef}>
           {" "}
         </div>
