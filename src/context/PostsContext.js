@@ -6,7 +6,7 @@ export const PostsContext = createContext()
 
 export const PostsProvider = ({ children }) => {
 
-  const { getData, data } = useFetchCol('posts')
+  const { getData, data, loading, error } = useFetchCol('posts')
 
   const fetch = useCallback(() => {
 
@@ -16,7 +16,7 @@ export const PostsProvider = ({ children }) => {
   }, [data, getData])
 
 
-  return <PostsContext.Provider value={{ fetch }}>
+  return <PostsContext.Provider value={{ fetch, data, loading, error }}>
     {children}
   </PostsContext.Provider>
 }

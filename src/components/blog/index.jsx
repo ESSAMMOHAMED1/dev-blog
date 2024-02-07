@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
 import { PostsContext } from "../../context/PostsContext";
+import PostCard from "./PostCard";
 
 const MainBlog = () => {
-  const { fetch } = useContext(PostsContext);
+  const { fetch, loading, error, data } = useContext(PostsContext);
   const isMount = useRef(false);
 
   useEffect(() => {
@@ -18,12 +19,28 @@ const MainBlog = () => {
       <Container>
         <h2 className="text-center mb-5"> Latest Posts</h2>
 
-        <Row xs="1" md="2" lg="4" className="g-4">
-          <Col> post</Col>
-          <Col> post</Col>
-          <Col> post</Col>
-          <Col> post</Col>
-        </Row>
+        {loading ? (
+          <div className="text-center">
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
+        ) : null}
+        {error ? (
+          <div>
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : null}
+
+        {(!error || !loading) && data ? (
+          <Row xs="1" md="2" lg="4" className="g-4">
+            {data.map((post) => (
+              <Col key={post.id}>
+                <PostCard post={post} />
+              </Col>
+            ))}
+          </Row>
+        ) : null}
       </Container>
     </section>
   );

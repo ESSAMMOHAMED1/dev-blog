@@ -16,7 +16,7 @@ const useFetchCol = (colName) => {
       const colRef = collection(db, colName)
       const q = query(colRef)
       const res = await getDocs(q)
-      console.log(res);
+
       const resData = res.docs.map(doc => {
         const docData = doc.data()
         return {
