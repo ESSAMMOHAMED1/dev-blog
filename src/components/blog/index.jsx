@@ -1,18 +1,31 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
-import { PostsContext } from "../../context/PostsContext";
 import PostCard from "./PostCard";
 
 const MainBlog = () => {
-  const { fetch, loading, error, data } = useContext(PostsContext);
   const isMount = useRef(false);
-
+  const blogObserveRef = useRef(null);
   useEffect(() => {
     if (!isMount.current) {
       fetch();
       isMount.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const blogObserver = entries[0];
+      if (blogObserver.isIntersecting) {
+        // fetch next data
+      }
+    }, {});
+
+    if (blogObserveRef.current) observer.observe(blogObserveRef.current);
+
+    return () => {
+      if (blogObserveRef.current) observer.unobserve(blogObserveRef.current);
+    };
+  }, [data, blogObserveRef, fetchNext]);
 
   return (
     <section className="py-5">
@@ -41,6 +54,9 @@ const MainBlog = () => {
             ))}
           </Row>
         ) : null}
+        <div className="blog-observer" ref={blogObserveRef}>
+          {" "}
+        </div>
       </Container>
     </section>
   );
