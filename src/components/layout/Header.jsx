@@ -1,10 +1,11 @@
-import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
 import styles from "./Header.module.css";
 
 import logoImg from "../../assets/images/logo.png";
+import { AuthContext } from "../../context/AuthContext";
 
 const DLink = ({ slug, end, title, children }) => {
   return (
@@ -17,6 +18,8 @@ const DLink = ({ slug, end, title, children }) => {
 };
 
 const Header = () => {
+  const { isAuth, logout } = useContext(AuthContext);
+
   return (
     <header className={styles.header}>
       <Navbar bg="dark" variant="dark">
@@ -29,8 +32,17 @@ const Header = () => {
           <Nav className="ms-auto">
             <DLink title="Home" slug="/" end />
             <DLink title="blog" slug="/blog" end />
-            <DLink title="login" slug="/login" />
-            <DLink title="New post" slug="/blog/new" />
+            {isAuth ? (
+              <>
+                <DLink title="New post" slug="/blog/new" />
+                <Button onClick={logout}> logout </Button>
+              </>
+            ) : (
+              <>
+                <DLink title="login" slug="/login" />
+                <DLink title="signup" slug="/signup" />
+              </>
+            )}
           </Nav>
         </Container>
       </Navbar>

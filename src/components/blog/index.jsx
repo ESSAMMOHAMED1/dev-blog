@@ -21,6 +21,7 @@ const MainBlog = () => {
       const blogObserver = entries[0];
       if (blogObserver.isIntersecting) {
         // fetch next data
+
         fetchNext();
       }
     }, {});

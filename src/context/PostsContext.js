@@ -16,7 +16,6 @@ export const PostsProvider = ({ children }) => {
 
   const fetchNext = useCallback(() => {
     if (data && !loading && !fetching && lastDoc) {
-      console.log("dddddd");    
       getNextData(lastDoc)
     }
   }, [data, getNextData, loading, fetching, lastDoc])

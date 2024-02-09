@@ -15,7 +15,7 @@ const useFetchDocParam = (colname, slug) => {
   const getData = useCallback(async () => {
     setLoading(true)
     setError(null)
-    try{
+    try {
 
       const colRef = collection(db, colname)
       const q = query(colRef, where('slug', '==', slug))

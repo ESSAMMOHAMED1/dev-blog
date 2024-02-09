@@ -6,12 +6,14 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 import { FirebaseContext } from "../../context/FirebaseContext";
+import { PostsContext } from "../../context/PostsContext";
 
 const MainNewPost = () => {
   const navigate = useNavigate();
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const { db } = useContext(FirebaseContext);
+  const { refetch } = useContext(PostsContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +40,7 @@ const MainNewPost = () => {
       e.target.reset();
       setBody("");
       setLoading(false);
+      refetch();
       navigate("/blog/" + slug);
     } catch (error) {
       console.log(error);

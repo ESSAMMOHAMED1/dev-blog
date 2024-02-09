@@ -1,5 +1,6 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useContext } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import AuthLayout from "../layouts/AuthLayout";
 import DefaultLayout from "../layouts/DefaultLayout";
 import Login from "../pages/auth/Login";
@@ -11,6 +12,7 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 
 const MainRouter = () => {
+  const { isAuth } = useContext(AuthContext);
   return (
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
@@ -20,13 +22,27 @@ const MainRouter = () => {
 
       <Route path="/blog" element={<DefaultLayout />}>
         <Route index element={<Blog />} />
-        <Route path="new" element={<NewPost />} />
+        {isAuth ? (
+          <Route path="new" element={<NewPost />} />
+        ) : (
+          <Route path="new" element={<Navigate to="/login" replace />} />
+        )}
+
         <Route path=":slug" element={<Article />} />
       </Route>
 
       <Route path="/" element={<AuthLayout />}>
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<SignUp />} />
+        {!isAuth ? (
+          <Route path="login" element={<Login />} />
+        ) : (
+          <Route path="login" element={<Navigate to="/" replace />} />
+        )}
+
+        {!isAuth ? (
+          <Route path="signup" element={<SignUp />} />
+        ) : (
+          <Route path="signup" element={<Navigate to="/" replace />} />
+        )}
       </Route>
     </Routes>
   );
